@@ -16,12 +16,12 @@ function App() {
     setTimeout(() => {
       setCards(drawTwoCards());
       setPosition(getRandomPosition());
-    }, 200);
+    }, 300);
 
     // アニメーション終了後にフラグをリセット
     setTimeout(() => {
       setIsFlipping(false);
-    }, 400);
+    }, 600);
   }, []);
 
   const togglePosition = useCallback(() => {
@@ -43,6 +43,15 @@ function App() {
 
   return (
     <div className="app">
+      {/* Background Layers */}
+      <div className="felt-texture" />
+      <div className="vignette" />
+      <div className="spotlight" />
+
+      {/* Decorative Suit Motifs */}
+      <span className="suit-motif spade">♠</span>
+      <span className="suit-motif diamond">♦</span>
+
       <div className="position-display">
         {showPosition ? (
           <>
@@ -61,6 +70,7 @@ function App() {
             rank={card.rank}
             suit={card.suit}
             isFlipping={isFlipping}
+            animationDelay={index * 0.1}
           />
         ))}
       </div>

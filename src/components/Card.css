@@ -1,42 +1,130 @@
-.card {
-  width: 100px;
-  height: 140px;
-  background: linear-gradient(145deg, #ffffff, #f5f5f5);
-  border-radius: 10px;
-  box-shadow:
-    0 4px 8px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 8px;
+/* ========================================
+   Luxury Monte Carlo Card Design
+   ======================================== */
+
+/* Card Wrapper - handles 3D perspective */
+.card-wrapper {
+  width: 110px;
+  height: 154px;
+  perspective: 1000px;
+  animation: fadeSlideUp 0.6s ease-out var(--animation-delay, 0.4s) both;
+}
+
+.card-inner {
   position: relative;
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.4s ease;
-  border: 2px solid #e0e0e0;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card.flipping {
-  animation: flipCard 0.4s ease;
+/* 3D Flip Animation */
+.card-wrapper.flipping .card-inner {
+  animation: flipCard3D 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes flipCard {
+@keyframes flipCard3D {
   0% {
     transform: rotateY(0deg) scale(1);
   }
   50% {
-    transform: rotateY(90deg) scale(0.95);
+    transform: rotateY(180deg) scale(0.92);
   }
   100% {
-    transform: rotateY(0deg) scale(1);
+    transform: rotateY(360deg) scale(1);
   }
 }
 
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   Base Card Styles (shared front/back)
+   ======================================== */
+.card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ========================================
+   Card Front
+   ======================================== */
+.card-front {
+  background: linear-gradient(165deg, #ffffff 0%, #f8f8f8 50%, #f0f0f0 100%);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid rgba(180, 180, 180, 0.3);
+  overflow: hidden;
+}
+
+/* Subtle paper texture */
+.card-texture {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+/* Gold border accent */
+.card-border-accent {
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 9px;
+  pointer-events: none;
+}
+
+/* Shine effect (hover) */
+.card-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  transform: skewX(-15deg);
+  pointer-events: none;
+  transition: left 0.5s ease;
+}
+
+.card-wrapper:hover .card-shine {
+  left: 150%;
+}
+
+/* ========================================
+   Card Corners & Typography
+   ======================================== */
 .card-corner {
   display: flex;
   flex-direction: column;
   align-items: center;
   line-height: 1;
+  z-index: 1;
 }
 
 .card-corner.top-left {
@@ -49,13 +137,17 @@
 }
 
 .card-rank {
-  font-size: 24px;
-  font-weight: bold;
-  font-family: 'Georgia', serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .card-suit-small {
-  font-size: 18px;
+  font-size: 20px;
+  line-height: 1;
+  margin-top: -2px;
 }
 
 .card-suit-center {
@@ -63,40 +155,144 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 48px;
+  font-size: 52px;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 赤のスーツ（ハート、ダイヤ） */
+/* ========================================
+   Card Colors
+   ======================================== */
+
+/* Red suits (Hearts, Diamonds) */
 .card.red .card-rank,
 .card.red .card-suit-small,
 .card.red .card-suit-center {
-  color: #cc0000;
+  color: #c41e3a;
 }
 
-/* 黒のスーツ（スペード、クラブ） */
+/* Black suits (Spades, Clubs) */
 .card.black .card-rank,
 .card.black .card-suit-small,
 .card.black .card-suit-center {
   color: #1a1a1a;
 }
 
-/* レスポンシブ対応 */
+/* ========================================
+   Card Back (Burgundy with Diamond Pattern)
+   ======================================== */
+.card-back {
+  background: linear-gradient(
+    145deg,
+    #7a2333 0%,
+    #5c1a28 40%,
+    #3d0f18 100%
+  );
+  transform: rotateY(180deg);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(122, 35, 51, 0.5);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Diamond pattern overlay */
+.card-back-pattern {
+  position: absolute;
+  inset: 8px;
+  background-image:
+    linear-gradient(45deg, transparent 48%, rgba(212, 175, 55, 0.08) 48%, rgba(212, 175, 55, 0.08) 52%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(212, 175, 55, 0.08) 48%, rgba(212, 175, 55, 0.08) 52%, transparent 52%);
+  background-size: 12px 12px;
+  border-radius: 6px;
+}
+
+/* Gold border on back */
+.card-back-border {
+  position: absolute;
+  inset: 6px;
+  border: 2px solid rgba(212, 175, 55, 0.4);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+/* Center logo */
+.card-back-logo {
+  display: flex;
+  gap: 4px;
+  z-index: 1;
+}
+
+.card-back-suit {
+  font-size: 28px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card-back-suit.spade {
+  color: rgba(212, 175, 55, 0.6);
+}
+
+.card-back-suit.heart {
+  color: rgba(212, 175, 55, 0.6);
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
 @media (max-width: 480px) {
-  .card {
-    width: 80px;
-    height: 112px;
-    padding: 6px;
+  .card-wrapper {
+    width: 90px;
+    height: 126px;
+  }
+
+  .card-front {
+    padding: 8px;
   }
 
   .card-rank {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .card-suit-small {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .card-suit-center {
-    font-size: 36px;
+    font-size: 40px;
+  }
+
+  .card-back-pattern {
+    inset: 6px;
+    background-size: 10px 10px;
+  }
+
+  .card-back-border {
+    inset: 5px;
+  }
+
+  .card-back-suit {
+    font-size: 22px;
+  }
+
+  /* Disable hover shine on mobile */
+  .card-wrapper:hover .card-shine {
+    left: -100%;
+  }
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .card-wrapper.flipping .card-inner {
+    animation: none;
+  }
+
+  .card-shine {
+    display: none;
   }
 }
