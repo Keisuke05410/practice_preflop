@@ -62,120 +62,18 @@
    Card Front
    ======================================== */
 .card-front {
-  background: linear-gradient(165deg, #ffffff 0%, #f8f8f8 50%, #f0f0f0 100%);
+  background: #fff;
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.4),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 10px;
-  border: 1px solid rgba(180, 180, 180, 0.3);
+    0 2px 8px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
-/* Subtle paper texture */
-.card-texture {
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  border-radius: 12px;
-  pointer-events: none;
-}
-
-/* Gold border accent */
-.card-border-accent {
-  position: absolute;
-  inset: 3px;
-  border: 1px solid rgba(212, 175, 55, 0.15);
-  border-radius: 9px;
-  pointer-events: none;
-}
-
-/* Shine effect (hover) */
-.card-shine {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
+.card-image {
+  width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    transparent 100%
-  );
-  transform: skewX(-15deg);
-  pointer-events: none;
-  transition: left 0.5s ease;
-}
-
-.card-wrapper:hover .card-shine {
-  left: 150%;
-}
-
-/* ========================================
-   Card Corners & Typography
-   ======================================== */
-.card-corner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1;
-  z-index: 1;
-}
-
-.card-corner.top-left {
-  align-self: flex-start;
-}
-
-.card-corner.bottom-right {
-  align-self: flex-end;
-  transform: rotate(180deg);
-}
-
-.card-rank {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -1px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-
-.card-suit-small {
-  font-size: 20px;
-  line-height: 1;
-  margin-top: -2px;
-}
-
-.card-suit-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 52px;
-  z-index: 1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* ========================================
-   Card Colors
-   ======================================== */
-
-/* Red suits (Hearts, Diamonds) */
-.card.red .card-rank,
-.card.red .card-suit-small,
-.card.red .card-suit-center {
-  color: #c41e3a;
-}
-
-/* Black suits (Spades, Clubs) */
-.card.black .card-rank,
-.card.black .card-suit-small,
-.card.black .card-suit-center {
-  color: #1a1a1a;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 /* ========================================
@@ -249,22 +147,6 @@
     height: 126px;
   }
 
-  .card-front {
-    padding: 8px;
-  }
-
-  .card-rank {
-    font-size: 22px;
-  }
-
-  .card-suit-small {
-    font-size: 16px;
-  }
-
-  .card-suit-center {
-    font-size: 40px;
-  }
-
   .card-back-pattern {
     inset: 6px;
     background-size: 10px 10px;
@@ -277,11 +159,6 @@
   .card-back-suit {
     font-size: 22px;
   }
-
-  /* Disable hover shine on mobile */
-  .card-wrapper:hover .card-shine {
-    left: -100%;
-  }
 }
 
 /* ========================================
@@ -290,9 +167,5 @@
 @media (prefers-reduced-motion: reduce) {
   .card-wrapper.flipping .card-inner {
     animation: none;
-  }
-
-  .card-shine {
-    display: none;
   }
 }

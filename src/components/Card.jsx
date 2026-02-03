@@ -1,8 +1,8 @@
-import { isRedSuit } from '../utils/cards';
+import { getCardImagePath } from '../utils/cards';
 import './Card.css';
 
 const Card = ({ rank, suit, isFlipping, animationDelay = 0 }) => {
-  const colorClass = isRedSuit(suit) ? 'red' : 'black';
+  const imagePath = getCardImagePath(rank, suit);
 
   return (
     <div
@@ -11,19 +11,8 @@ const Card = ({ rank, suit, isFlipping, animationDelay = 0 }) => {
     >
       <div className="card-inner">
         {/* Front of card */}
-        <div className={`card card-front ${colorClass}`}>
-          <div className="card-texture" />
-          <div className="card-border-accent" />
-          <div className="card-corner top-left">
-            <span className="card-rank">{rank}</span>
-            <span className="card-suit-small">{suit}</span>
-          </div>
-          <span className="card-suit-center">{suit}</span>
-          <div className="card-corner bottom-right">
-            <span className="card-rank">{rank}</span>
-            <span className="card-suit-small">{suit}</span>
-          </div>
-          <div className="card-shine" />
+        <div className="card card-front">
+          <img src={imagePath} alt={`${rank}${suit}`} className="card-image" />
         </div>
 
         {/* Back of card */}

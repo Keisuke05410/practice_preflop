@@ -45,3 +45,17 @@ export const getRandomPosition = () => {
 export const isRedSuit = (suit) => {
   return suit === '♥' || suit === '♦';
 };
+
+// スーツ記号からフォルダ名へのマッピング
+const SUIT_TO_FOLDER = {
+  '♠': 'spade',
+  '♥': 'heart',
+  '♦': 'diamond',
+  '♣': 'club',
+};
+
+// カード画像のパスを取得
+export const getCardImagePath = (rank, suit) => {
+  const folder = SUIT_TO_FOLDER[suit];
+  return `/playing_cards/${folder}/${folder}_${rank}.png`;
+};
