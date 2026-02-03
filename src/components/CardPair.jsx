@@ -60,12 +60,14 @@ const CardPair = ({ cards, isVisible, animationType = 'scale' }) => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    // cards が変更されたら isReady をリセット
+    setIsReady(false);
     // 次のフレームで ready にする（transition を正しくトリガーするため）
     const raf = requestAnimationFrame(() => {
       setIsReady(true);
     });
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [cards]);
 
   const config = animationStyles[animationType];
   // isReady になるまでは hidden、その後は isVisible に従う
