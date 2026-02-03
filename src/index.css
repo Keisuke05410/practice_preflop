@@ -143,6 +143,17 @@
   }
 }
 
+/* カード前面の可視性制御 - 状態更新タイミング問題を解決 */
+@keyframes fadeOutFront {
+  0%, 45% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes fadeInFront {
+  0%, 45% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+
 @layer components {
   .card-wrapper {
     @apply w-[110px] h-[154px] max-sm:w-[90px] max-sm:h-[126px];
@@ -161,6 +172,16 @@
 
   .card-wrapper.flip-in .card-inner {
     animation: flipIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  /* flipOut時にカード前面を隠す（90度を超えたら見えなくなる） */
+  .card-wrapper.flip-out .card-front {
+    animation: fadeOutFront 0.3s forwards;
+  }
+
+  /* flipIn時にカード前面を表示する（270度を超えたら見える） */
+  .card-wrapper.flip-in .card-front {
+    animation: fadeInFront 0.3s forwards;
   }
 
   @media (prefers-reduced-motion: reduce) {
