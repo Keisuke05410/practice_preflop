@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Card from './components/Card';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { drawTwoCards, getRandomPosition } from './utils/cards';
 import './App.css';
 
@@ -24,10 +26,6 @@ function App() {
     }, 600);
   }, []);
 
-  const togglePosition = useCallback(() => {
-    setShowPosition((prev) => !prev);
-  }, []);
-
   // キーボードショートカット
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -43,15 +41,6 @@ function App() {
 
   return (
     <div className="app">
-      {/* Background Layers */}
-      <div className="felt-texture" />
-      <div className="vignette" />
-      <div className="spotlight" />
-
-      {/* Decorative Suit Motifs */}
-      <span className="suit-motif spade">♠</span>
-      <span className="suit-motif diamond">♦</span>
-
       <div className="position-display">
         {showPosition ? (
           <>
@@ -70,30 +59,23 @@ function App() {
             rank={card.rank}
             suit={card.suit}
             isFlipping={isFlipping}
-            animationDelay={index * 0.1}
           />
         ))}
       </div>
 
-      <button className="next-button" onClick={handleNextHand}>
+      <Button size="lg" onClick={handleNextHand}>
         次のハンド
-      </button>
+      </Button>
 
       <div className="toggle-container">
-        <div
-          className={`toggle-switch ${showPosition ? 'active' : ''}`}
-          onClick={togglePosition}
-          role="switch"
-          aria-checked={showPosition}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.code === 'Enter' || e.code === 'Space') {
-              e.preventDefault();
-              togglePosition();
-            }
-          }}
+        <Switch
+          id="position-toggle"
+          checked={showPosition}
+          onCheckedChange={setShowPosition}
         />
-        <span className="toggle-label">ポジション表示</span>
+        <label htmlFor="position-toggle" className="toggle-label">
+          ポジション表示
+        </label>
       </div>
 
       <div className="shortcut-hint">Space: 次のハンド</div>
