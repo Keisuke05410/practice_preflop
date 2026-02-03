@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Settings } from 'lucide-react';
 import CardPair from './components/CardPair';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { drawTwoCards, getRandomPosition, preloadAllCardImages } from './utils/cards';
 
 const ANIMATION_TYPES = [
   { id: 'scale', label: 'スケール' },
   { id: 'slide', label: 'スライド' },
   { id: 'fade', label: 'フェード' },
-  { id: 'flip', label: '回転(transition)' },
+  { id: 'flip', label: '回転' },
 ];
 
 function App() {
@@ -115,47 +117,68 @@ function App() {
         <CardPair cards={layerB} isVisible={activeLayer === 'B'} animationType={animationType} />
       </div>
 
-      <Button size="lg" onClick={handleNextHand}>
-        次のハンド
-      </Button>
+      {/* ボタンエリア */}
+      <div className="relative flex items-center justify-center">
+        <Button size="lg" onClick={handleNextHand}>
+          次のハンド
+        </Button>
 
-      {/* アニメーション選択 */}
-      <div className="flex flex-wrap justify-center gap-2">
-        {ANIMATION_TYPES.map((type) => (
-          <button
-            key={type.id}
-            onClick={() => setAnimationType(type.id)}
-            className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
-              animationType === type.id
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-secondary text-secondary-foreground border-border hover:bg-accent'
-            }`}
-          >
-            {type.label}
-          </button>
-        ))}
-      </div>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" size="icon" aria-label="設定" className="absolute left-full ml-3">
+              <Settings className="h-5 w-5" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-64">
+            <div className="space-y-4">
+              <h4 className="font-medium text-sm">設定</h4>
 
-      <div className="flex items-center gap-3">
-        <Switch
-          id="position-toggle"
-          checked={showPosition}
-          onCheckedChange={setShowPosition}
-        />
-        <label htmlFor="position-toggle" className="text-sm select-none">
-          ポジション表示
-        </label>
-      </div>
+              {/* アニメーション選択 */}
+              <div>
+                <label className="text-sm text-muted-foreground">アニメーション</label>
+                <div className="grid grid-cols-2 gap-2 mt-3">
+                  {ANIMATION_TYPES.map((type) => (
+                    <button
+                      key={type.id}
+                      onClick={() => setAnimationType(type.id)}
+                      className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
+                        animationType === type.id
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'bg-secondary text-secondary-foreground border-border hover:bg-accent'
+                      }`}
+                    >
+                      {type.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-      <div className="flex items-center gap-3">
-        <Switch
-          id="dark-mode-toggle"
-          checked={isDarkMode}
-          onCheckedChange={handleDarkModeChange}
-        />
-        <label htmlFor="dark-mode-toggle" className="text-sm select-none">
-          ダークモード
-        </label>
+              {/* ポジション表示トグル */}
+              <div className="flex items-center justify-between">
+                <label htmlFor="position-toggle" className="text-sm text-muted-foreground">
+                  ポジション表示
+                </label>
+                <Switch
+                  id="position-toggle"
+                  checked={showPosition}
+                  onCheckedChange={setShowPosition}
+                />
+              </div>
+
+              {/* ダークモードトグル */}
+              <div className="flex items-center justify-between">
+                <label htmlFor="dark-mode-toggle" className="text-sm text-muted-foreground">
+                  ダークモード
+                </label>
+                <Switch
+                  id="dark-mode-toggle"
+                  checked={isDarkMode}
+                  onCheckedChange={handleDarkModeChange}
+                />
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
 
       <div className="fixed bottom-6 right-6 text-muted-foreground text-xs max-sm:hidden">Space: 次のハンド</div>
