@@ -8,7 +8,7 @@ const Card = ({ rank, suit, isVisible }) => {
       <img
         src={imagePath}
         alt={`${rank}${suit}`}
-        className="w-full h-full object-cover rounded-xl"
+        className="w-full h-full object-cover rounded-xl shadow-lg"
       />
     </div>
   );

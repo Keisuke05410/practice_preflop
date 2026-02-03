@@ -134,7 +134,7 @@
 
   /* Card Layer - 3D回転対応 */
   .card-layer {
-    @apply absolute inset-0 bg-white shadow-lg rounded-xl overflow-hidden;
+    @apply absolute inset-0 rounded-xl overflow-hidden;
     transform-style: preserve-3d;
     backface-visibility: hidden;
   }
