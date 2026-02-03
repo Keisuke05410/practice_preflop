@@ -1,13 +1,10 @@
 import { getCardImagePath } from '../utils/cards';
 
-const Card = ({ rank, suit, isAnimating, onAnimationEnd }) => {
+const Card = ({ rank, suit, isVisible }) => {
   const imagePath = getCardImagePath(rank, suit);
 
   return (
-    <div
-      className={`card ${isAnimating ? 'fade-out' : 'fade-in'}`}
-      onAnimationEnd={onAnimationEnd}
-    >
+    <div className={`card-layer ${isVisible ? 'visible' : 'hidden'}`}>
       <img
         src={imagePath}
         alt={`${rank}${suit}`}

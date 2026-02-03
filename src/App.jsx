@@ -1,17 +1,17 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Card from './components/Card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { drawTwoCards, getRandomPosition } from './utils/cards';
 
 function App() {
-  const [cards, setCards] = useState(() => drawTwoCards());
+  // 2レイヤー状態管理
+  const [layerA, setLayerA] = useState(() => drawTwoCards());
+  const [layerB, setLayerB] = useState(null);
+  const [activeLayer, setActiveLayer] = useState('A');
+
   const [position, setPosition] = useState(() => getRandomPosition());
   const [showPosition, setShowPosition] = useState(true);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [pendingCards, setPendingCards] = useState(null);
-  const [pendingPosition, setPendingPosition] = useState(null);
-  const animationEndCountRef = useRef(0);
 
   // ダークモード状態管理
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -37,30 +37,18 @@ function App() {
   }, []);
 
   const handleNextHand = useCallback(() => {
-    if (isAnimating) return; // アニメーション中は無視
-    animationEndCountRef.current = 0;
-    // 次のカードを準備
-    setPendingCards(drawTwoCards());
-    setPendingPosition(getRandomPosition());
-    setIsAnimating(true);
-  }, [isAnimating]);
+    const nextCards = drawTwoCards();
+    const nextPosition = getRandomPosition();
 
-  const handleAnimationEnd = useCallback(() => {
-    animationEndCountRef.current += 1;
-    // 2枚のカード両方のアニメーションが終わるまで待つ
-    if (animationEndCountRef.current < 2) return;
-
-    animationEndCountRef.current = 0;
-
-    // フェードアウト完了: カードを更新
-    if (pendingCards) {
-      setCards(pendingCards);
-      setPosition(pendingPosition);
-      setPendingCards(null);
-      setPendingPosition(null);
+    if (activeLayer === 'A') {
+      setLayerB(nextCards);
+      setActiveLayer('B');
+    } else {
+      setLayerA(nextCards);
+      setActiveLayer('A');
     }
-    setIsAnimating(false);
-  }, [pendingCards, pendingPosition]);
+    setPosition(nextPosition);
+  }, [activeLayer]);
 
   // キーボードショートカット
   useEffect(() => {
@@ -87,14 +75,25 @@ function App() {
       </div>
 
       <div className="flex gap-6 max-sm:gap-3.5">
-        {cards.map((card, index) => (
-          <Card
-            key={index}
-            rank={card.rank}
-            suit={card.suit}
-            isAnimating={isAnimating}
-            onAnimationEnd={handleAnimationEnd}
-          />
+        {[0, 1].map((index) => (
+          <div key={index} className="card-container">
+            {/* Layer A */}
+            {layerA && (
+              <Card
+                rank={layerA[index].rank}
+                suit={layerA[index].suit}
+                isVisible={activeLayer === 'A'}
+              />
+            )}
+            {/* Layer B */}
+            {layerB && (
+              <Card
+                rank={layerB[index].rank}
+                suit={layerB[index].suit}
+                isVisible={activeLayer === 'B'}
+              />
+            )}
+          </div>
         ))}
       </div>
 
