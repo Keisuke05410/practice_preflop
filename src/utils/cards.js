@@ -59,3 +59,23 @@ export const getCardImagePath = (rank, suit) => {
   const folder = SUIT_TO_FOLDER[suit];
   return `/playing_cards/${folder}/${folder}_${rank}.png`;
 };
+
+// 全カード画像をプリロード
+export const preloadAllCardImages = () => {
+  const promises = [];
+
+  for (const suit of SUITS) {
+    for (const rank of RANKS) {
+      const path = getCardImagePath(rank, suit);
+      const promise = new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = path;
+      });
+      promises.push(promise);
+    }
+  }
+
+  return Promise.all(promises);
+};

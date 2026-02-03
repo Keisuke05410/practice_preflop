@@ -17,7 +17,8 @@ src/
 ├── index.css             # Tailwind CSS + shadcn/ui テーマ変数 + カードアニメーション
 ├── App.jsx               # メインコンポーネント（状態管理、キーボード操作）
 ├── components/
-│   ├── Card.jsx          # カード表示コンポーネント（3Dフリップ対応）
+│   ├── Card.jsx          # 個別カード表示コンポーネント
+│   ├── CardPair.jsx      # カードペアコンポーネント（2枚同期アニメーション）
 │   └── ui/               # shadcn/uiコンポーネント
 │       ├── button.jsx
 │       └── switch.jsx

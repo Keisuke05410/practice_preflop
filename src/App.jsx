@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import CardPair from './components/CardPair';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { drawTwoCards, getRandomPosition } from './utils/cards';
+import { drawTwoCards, getRandomPosition, preloadAllCardImages } from './utils/cards';
 
 const ANIMATION_TYPES = [
   { id: 'scale', label: 'スケール' },
@@ -12,6 +12,9 @@ const ANIMATION_TYPES = [
 ];
 
 function App() {
+  // 画像プリロード状態
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
   // 2レイヤー状態管理
   const [layerA, setLayerA] = useState(() => drawTwoCards());
   const [layerB, setLayerB] = useState(() => drawTwoCards());
@@ -31,6 +34,13 @@ function App() {
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
+
+  // アプリ起動時に全カード画像をプリロード
+  useEffect(() => {
+    preloadAllCardImages()
+      .then(() => setImagesLoaded(true))
+      .catch(console.error);
+  }, []);
 
   // ダークモードの適用
   useEffect(() => {
@@ -77,6 +87,15 @@ function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNextHand]);
+
+  // プリロード完了前はローディング表示
+  if (!imagesLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <span className="text-muted-foreground">Loading...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-5 gap-6 max-sm:p-4 max-sm:gap-5">
