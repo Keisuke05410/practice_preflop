@@ -1,11 +1,17 @@
 import { getCardImagePath } from '../utils/cards';
 
-const Card = ({ rank, suit, isFlipping }) => {
+const Card = ({ rank, suit, flipPhase, onAnimationEnd }) => {
   const imagePath = getCardImagePath(rank, suit);
 
+  const getFlipClass = () => {
+    if (flipPhase === 'out') return 'flip-out';
+    if (flipPhase === 'in') return 'flip-in';
+    return '';
+  };
+
   return (
-    <div className={`card-wrapper ${isFlipping ? 'flipping' : ''}`}>
-      <div className="card-inner">
+    <div className={`card-wrapper ${getFlipClass()}`}>
+      <div className="card-inner" onAnimationEnd={onAnimationEnd}>
         {/* Front of card */}
         <div className="card-base card-front">
           <img src={imagePath} alt={`${rank}${suit}`} className="w-full h-full object-cover rounded-xl" />

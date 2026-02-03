@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Card from './components/Card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -8,22 +8,33 @@ function App() {
   const [cards, setCards] = useState(() => drawTwoCards());
   const [position, setPosition] = useState(() => getRandomPosition());
   const [showPosition, setShowPosition] = useState(true);
-  const [isFlipping, setIsFlipping] = useState(false);
+  // flipPhase: 'idle' | 'out' | 'in'
+  const [flipPhase, setFlipPhase] = useState('idle');
+  const animationEndCountRef = useRef(0);
 
   const handleNextHand = useCallback(() => {
-    setIsFlipping(true);
+    if (flipPhase !== 'idle') return; // アニメーション中は無視
+    animationEndCountRef.current = 0;
+    setFlipPhase('out');
+  }, [flipPhase]);
 
-    // アニメーションの中間点で新しいカードをセット
-    setTimeout(() => {
+  const handleAnimationEnd = useCallback(() => {
+    animationEndCountRef.current += 1;
+    // 2枚のカード両方のアニメーションが終わるまで待つ
+    if (animationEndCountRef.current < 2) return;
+
+    animationEndCountRef.current = 0;
+
+    if (flipPhase === 'out') {
+      // flipOut完了: カードを更新してflipInへ
       setCards(drawTwoCards());
       setPosition(getRandomPosition());
-    }, 300);
-
-    // アニメーション終了後にフラグをリセット
-    setTimeout(() => {
-      setIsFlipping(false);
-    }, 600);
-  }, []);
+      setFlipPhase('in');
+    } else if (flipPhase === 'in') {
+      // flipIn完了: idleに戻る
+      setFlipPhase('idle');
+    }
+  }, [flipPhase]);
 
   // キーボードショートカット
   useEffect(() => {
@@ -55,7 +66,8 @@ function App() {
             key={index}
             rank={card.rank}
             suit={card.suit}
-            isFlipping={isFlipping}
+            flipPhase={flipPhase}
+            onAnimationEnd={handleAnimationEnd}
           />
         ))}
       </div>

@@ -123,13 +123,19 @@
 }
 
 /* ========================================
-   Card Animation
+   Card Animation - 2 Phase Flip
    ======================================== */
-@keyframes flipCard {
+@keyframes flipOut {
   0% {
     transform: rotateY(0deg) scale(1);
   }
-  50% {
+  100% {
+    transform: rotateY(180deg) scale(0.92);
+  }
+}
+
+@keyframes flipIn {
+  0% {
     transform: rotateY(180deg) scale(0.92);
   }
   100% {
@@ -149,12 +155,17 @@
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .card-wrapper.flipping .card-inner {
-    animation: flipCard 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  .card-wrapper.flip-out .card-inner {
+    animation: flipOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .card-wrapper.flip-in .card-inner {
+    animation: flipIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .card-wrapper.flipping .card-inner {
+    .card-wrapper.flip-out .card-inner,
+    .card-wrapper.flip-in .card-inner {
       animation: none;
     }
   }
