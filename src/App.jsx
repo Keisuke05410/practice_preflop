@@ -3,7 +3,7 @@ import { Settings } from 'lucide-react';
 import CardPair from './components/CardPair';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { drawTwoCards, getRandomPosition, preloadAllCardImages } from './utils/cards';
 
 const ANIMATION_TYPES = [
@@ -123,16 +123,17 @@ function App() {
           次のハンド
         </Button>
 
-        <Popover>
-          <PopoverTrigger asChild>
+        <Dialog>
+          <DialogTrigger asChild>
             <Button variant="outline" size="icon" aria-label="設定" className="absolute left-full ml-3">
               <Settings className="h-5 w-5" />
             </Button>
-          </PopoverTrigger>
-          <PopoverContent align="end" className="w-64">
+          </DialogTrigger>
+          <DialogContent className="w-80 max-w-[90vw]">
+            <DialogHeader>
+              <DialogTitle>設定</DialogTitle>
+            </DialogHeader>
             <div className="space-y-4">
-              <h4 className="font-medium text-sm">設定</h4>
-
               {/* アニメーション選択 */}
               <div>
                 <label className="text-sm text-muted-foreground">アニメーション</label>
@@ -177,8 +178,8 @@ function App() {
                 />
               </div>
             </div>
-          </PopoverContent>
-        </Popover>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="fixed bottom-6 right-6 text-muted-foreground text-xs max-sm:hidden">Space: 次のハンド</div>
