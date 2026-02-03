@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Card from './Card';
 
 const animationStyles = {
@@ -56,8 +57,20 @@ const animationStyles = {
 };
 
 const CardPair = ({ cards, isVisible, animationType = 'scale' }) => {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    // 次のフレームで ready にする（transition を正しくトリガーするため）
+    const raf = requestAnimationFrame(() => {
+      setIsReady(true);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   const config = animationStyles[animationType];
-  const stateStyle = isVisible ? config.visible : config.hidden;
+  // isReady になるまでは hidden、その後は isVisible に従う
+  const shouldShow = isReady && isVisible;
+  const stateStyle = shouldShow ? config.visible : config.hidden;
 
   const style = {
     ...stateStyle,
