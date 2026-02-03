@@ -4,6 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { drawTwoCards, getRandomPosition } from './utils/cards';
 
+const ANIMATION_TYPES = [
+  { id: 'scale', label: 'スケール' },
+  { id: 'slide', label: 'スライド' },
+  { id: 'fade', label: 'フェード' },
+  { id: 'flip', label: '回転(transition)' },
+];
+
 function App() {
   // 2レイヤー状態管理
   const [layerA, setLayerA] = useState(() => drawTwoCards());
@@ -12,6 +19,9 @@ function App() {
 
   const [position, setPosition] = useState(() => getRandomPosition());
   const [showPosition, setShowPosition] = useState(true);
+
+  // アニメーションタイプ
+  const [animationType, setAnimationType] = useState('scale');
 
   // ダークモード状態管理
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -77,17 +87,34 @@ function App() {
       <div className="cards-pair-container">
         {/* Layer A */}
         {layerA && (
-          <CardPair cards={layerA} isVisible={activeLayer === 'A'} />
+          <CardPair cards={layerA} isVisible={activeLayer === 'A'} animationType={animationType} />
         )}
         {/* Layer B */}
         {layerB && (
-          <CardPair cards={layerB} isVisible={activeLayer === 'B'} />
+          <CardPair cards={layerB} isVisible={activeLayer === 'B'} animationType={animationType} />
         )}
       </div>
 
       <Button size="lg" onClick={handleNextHand}>
         次のハンド
       </Button>
+
+      {/* アニメーション選択 */}
+      <div className="flex flex-wrap justify-center gap-2">
+        {ANIMATION_TYPES.map((type) => (
+          <button
+            key={type.id}
+            onClick={() => setAnimationType(type.id)}
+            className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
+              animationType === type.id
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'bg-secondary text-secondary-foreground border-border hover:bg-accent'
+            }`}
+          >
+            {type.label}
+          </button>
+        ))}
+      </div>
 
       <div className="flex items-center gap-3">
         <Switch
