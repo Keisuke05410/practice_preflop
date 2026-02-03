@@ -41,13 +41,11 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-5 gap-6 max-sm:p-4 max-sm:gap-5">
       <div className="min-h-[60px] flex items-center justify-center gap-2">
-        {showPosition ? (
+        {showPosition && (
           <>
             <span className="text-sm text-muted-foreground">Position:</span>
             <span className="text-[32px] max-sm:text-2xl font-bold tracking-wide">{position}</span>
           </>
-        ) : (
-          <span className="text-muted-foreground italic text-sm">ポジション非表示</span>
         )}
       </div>
 
