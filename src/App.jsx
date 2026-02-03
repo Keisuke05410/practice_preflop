@@ -8,8 +8,9 @@ function App() {
   const [cards, setCards] = useState(() => drawTwoCards());
   const [position, setPosition] = useState(() => getRandomPosition());
   const [showPosition, setShowPosition] = useState(true);
-  // flipPhase: 'idle' | 'out' | 'in'
-  const [flipPhase, setFlipPhase] = useState('idle');
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [pendingCards, setPendingCards] = useState(null);
+  const [pendingPosition, setPendingPosition] = useState(null);
   const animationEndCountRef = useRef(0);
 
   // ダークモード状態管理
@@ -36,10 +37,13 @@ function App() {
   }, []);
 
   const handleNextHand = useCallback(() => {
-    if (flipPhase !== 'idle') return; // アニメーション中は無視
+    if (isAnimating) return; // アニメーション中は無視
     animationEndCountRef.current = 0;
-    setFlipPhase('out');
-  }, [flipPhase]);
+    // 次のカードを準備
+    setPendingCards(drawTwoCards());
+    setPendingPosition(getRandomPosition());
+    setIsAnimating(true);
+  }, [isAnimating]);
 
   const handleAnimationEnd = useCallback(() => {
     animationEndCountRef.current += 1;
@@ -48,16 +52,15 @@ function App() {
 
     animationEndCountRef.current = 0;
 
-    if (flipPhase === 'out') {
-      // flipOut完了: カードを更新してflipInへ
-      setCards(drawTwoCards());
-      setPosition(getRandomPosition());
-      setFlipPhase('in');
-    } else if (flipPhase === 'in') {
-      // flipIn完了: idleに戻る
-      setFlipPhase('idle');
+    // フェードアウト完了: カードを更新
+    if (pendingCards) {
+      setCards(pendingCards);
+      setPosition(pendingPosition);
+      setPendingCards(null);
+      setPendingPosition(null);
     }
-  }, [flipPhase]);
+    setIsAnimating(false);
+  }, [pendingCards, pendingPosition]);
 
   // キーボードショートカット
   useEffect(() => {
@@ -89,7 +92,7 @@ function App() {
             key={index}
             rank={card.rank}
             suit={card.suit}
-            flipPhase={flipPhase}
+            isAnimating={isAnimating}
             onAnimationEnd={handleAnimationEnd}
           />
         ))}
