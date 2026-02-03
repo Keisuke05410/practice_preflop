@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import Card from './components/Card';
+import CardPair from './components/CardPair';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { drawTwoCards, getRandomPosition } from './utils/cards';
@@ -74,27 +74,15 @@ function App() {
         )}
       </div>
 
-      <div className="flex gap-6 max-sm:gap-3.5">
-        {[0, 1].map((index) => (
-          <div key={index} className="card-container">
-            {/* Layer A */}
-            {layerA && (
-              <Card
-                rank={layerA[index].rank}
-                suit={layerA[index].suit}
-                isVisible={activeLayer === 'A'}
-              />
-            )}
-            {/* Layer B */}
-            {layerB && (
-              <Card
-                rank={layerB[index].rank}
-                suit={layerB[index].suit}
-                isVisible={activeLayer === 'B'}
-              />
-            )}
-          </div>
-        ))}
+      <div className="cards-pair-container">
+        {/* Layer A */}
+        {layerA && (
+          <CardPair cards={layerA} isVisible={activeLayer === 'A'} />
+        )}
+        {/* Layer B */}
+        {layerB && (
+          <CardPair cards={layerB} isVisible={activeLayer === 'B'} />
+        )}
       </div>
 
       <Button size="lg" onClick={handleNextHand}>

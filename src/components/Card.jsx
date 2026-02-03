@@ -1,10 +1,10 @@
 import { getCardImagePath } from '../utils/cards';
 
-const Card = ({ rank, suit, isVisible }) => {
+const Card = ({ rank, suit }) => {
   const imagePath = getCardImagePath(rank, suit);
 
   return (
-    <div className={`card-layer ${isVisible ? 'visible' : 'hidden'}`}>
+    <div className="card-item">
       <img
         src={imagePath}
         alt={`${rank}${suit}`}

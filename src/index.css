@@ -123,30 +123,45 @@
 }
 
 /* ========================================
-   Card Animation - 3D Y-Axis Flip
+   Card Animation - 3D Y-Axis Flip (Synchronized)
    ======================================== */
 @layer components {
-  /* Card Container - 3D空間を設定 */
-  .card-container {
-    @apply relative w-[110px] h-[154px] max-sm:w-[90px] max-sm:h-[126px];
+  /* Cards Pair Container - 2枚のカードを包む親要素 */
+  .cards-pair-container {
+    @apply relative;
+    /* 2枚のカード + gap のサイズを明示的に指定 */
+    width: calc(110px * 2 + 1.5rem);
+    height: 154px;
     perspective: 1000px;
   }
 
-  /* Card Layer - 3D回転対応 */
-  .card-layer {
-    @apply absolute inset-0 rounded-xl overflow-hidden;
+  @media (max-width: 640px) {
+    .cards-pair-container {
+      width: calc(90px * 2 + 0.875rem);
+      height: 126px;
+    }
+  }
+
+  /* Card Pair Layer - 2枚のカードを一括でアニメーション */
+  .card-pair-layer {
+    @apply absolute inset-0 flex gap-6 max-sm:gap-3.5;
     transform-style: preserve-3d;
     backface-visibility: hidden;
   }
 
-  .card-layer.visible {
+  .card-pair-layer.visible {
     z-index: 2;
     animation: flipIn 0.3s ease-out forwards;
   }
 
-  .card-layer.hidden {
+  .card-pair-layer.hidden {
     z-index: 1;
     animation: flipOut 0.3s ease-in forwards;
+  }
+
+  /* 個別カード表示 */
+  .card-item {
+    @apply w-[110px] h-[154px] max-sm:w-[90px] max-sm:h-[126px] rounded-xl overflow-hidden;
   }
 
   /* 退場アニメーション: 0° → 90° */
@@ -175,16 +190,16 @@
 
   /* アクセシビリティ対応 - モーション軽減 */
   @media (prefers-reduced-motion: reduce) {
-    .card-layer {
+    .card-pair-layer {
       animation: none;
     }
 
-    .card-layer.visible {
+    .card-pair-layer.visible {
       opacity: 1;
       transform: rotateY(0deg);
     }
 
-    .card-layer.hidden {
+    .card-pair-layer.hidden {
       opacity: 0;
       transform: rotateY(0deg);
     }
