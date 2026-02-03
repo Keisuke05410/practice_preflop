@@ -12,6 +12,29 @@ function App() {
   const [flipPhase, setFlipPhase] = useState('idle');
   const animationEndCountRef = useRef(0);
 
+  // ダークモード状態管理
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    if (saved !== null) {
+      return saved === 'true';
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  // ダークモードの適用
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('darkMode', isDarkMode);
+  }, [isDarkMode]);
+
+  const handleDarkModeChange = useCallback((checked) => {
+    setIsDarkMode(checked);
+  }, []);
+
   const handleNextHand = useCallback(() => {
     if (flipPhase !== 'idle') return; // アニメーション中は無視
     animationEndCountRef.current = 0;
@@ -84,6 +107,17 @@ function App() {
         />
         <label htmlFor="position-toggle" className="text-sm select-none">
           ポジション表示
+        </label>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <Switch
+          id="dark-mode-toggle"
+          checked={isDarkMode}
+          onCheckedChange={handleDarkModeChange}
+        />
+        <label htmlFor="dark-mode-toggle" className="text-sm select-none">
+          ダークモード
         </label>
       </div>
 
