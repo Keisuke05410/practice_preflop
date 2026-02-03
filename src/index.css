@@ -121,3 +121,74 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ========================================
+   3D Card Animation
+   ======================================== */
+@keyframes flipCard3D {
+  0% {
+    transform: rotateY(0deg) scale(1);
+  }
+  50% {
+    transform: rotateY(180deg) scale(0.92);
+  }
+  100% {
+    transform: rotateY(360deg) scale(1);
+  }
+}
+
+@layer components {
+  .card-wrapper {
+    @apply w-[110px] h-[154px] max-sm:w-[90px] max-sm:h-[126px];
+    perspective: 1000px;
+  }
+
+  .card-inner {
+    @apply relative w-full h-full;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-wrapper.flipping .card-inner {
+    animation: flipCard3D 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-wrapper.flipping .card-inner {
+      animation: none;
+    }
+  }
+
+  .card-base {
+    @apply absolute w-full h-full rounded-xl;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .card-front {
+    @apply bg-white shadow-lg overflow-hidden;
+  }
+
+  .card-back {
+    @apply flex items-center justify-center overflow-hidden;
+    background: linear-gradient(145deg, #374151, #1f2937);
+    transform: rotateY(180deg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .card-back-border {
+    @apply absolute pointer-events-none rounded-md max-sm:inset-1.5;
+    inset: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .card-back-logo {
+    @apply flex gap-1 z-10;
+  }
+
+  .card-back-suit {
+    @apply text-[28px] max-sm:text-[22px];
+    color: rgba(255, 255, 255, 0.6);
+  }
+}

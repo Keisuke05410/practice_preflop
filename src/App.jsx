@@ -3,7 +3,6 @@ import Card from './components/Card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { drawTwoCards, getRandomPosition } from './utils/cards';
-import './App.css';
 
 function App() {
   const [cards, setCards] = useState(() => drawTwoCards());
@@ -40,19 +39,19 @@ function App() {
   }, [handleNextHand]);
 
   return (
-    <div className="app">
-      <div className="position-display">
+    <div className="min-h-screen flex flex-col items-center justify-center p-5 gap-6 max-sm:p-4 max-sm:gap-5">
+      <div className="min-h-[60px] flex items-center justify-center gap-2">
         {showPosition ? (
           <>
-            <span className="position-label">Position:</span>
-            <span className="position-value">{position}</span>
+            <span className="text-sm text-muted-foreground">Position:</span>
+            <span className="text-[32px] max-sm:text-2xl font-bold tracking-wide">{position}</span>
           </>
         ) : (
-          <span className="position-placeholder">ポジション非表示</span>
+          <span className="text-muted-foreground italic text-sm">ポジション非表示</span>
         )}
       </div>
 
-      <div className="cards-container">
+      <div className="flex gap-6 max-sm:gap-3.5">
         {cards.map((card, index) => (
           <Card
             key={`${card.rank}-${card.suit}-${index}`}
@@ -67,18 +66,18 @@ function App() {
         次のハンド
       </Button>
 
-      <div className="toggle-container">
+      <div className="flex items-center gap-3">
         <Switch
           id="position-toggle"
           checked={showPosition}
           onCheckedChange={setShowPosition}
         />
-        <label htmlFor="position-toggle" className="toggle-label">
+        <label htmlFor="position-toggle" className="text-sm select-none">
           ポジション表示
         </label>
       </div>
 
-      <div className="shortcut-hint">Space: 次のハンド</div>
+      <div className="fixed bottom-6 right-6 text-muted-foreground text-xs max-sm:hidden">Space: 次のハンド</div>
     </div>
   );
 }

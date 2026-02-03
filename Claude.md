@@ -14,12 +14,10 @@
 ```
 src/
 ├── main.jsx              # エントリポイント
-├── index.css             # Tailwind CSS + shadcn/ui テーマ変数
+├── index.css             # Tailwind CSS + shadcn/ui テーマ変数 + カードアニメーション
 ├── App.jsx               # メインコンポーネント（状態管理、キーボード操作）
-├── App.css               # レイアウトスタイル
 ├── components/
-│   ├── Card.jsx          # カード表示コンポーネント
-│   ├── Card.css          # カードスタイル（3Dフリップアニメーション）
+│   ├── Card.jsx          # カード表示コンポーネント（3Dフリップ対応）
 │   └── ui/               # shadcn/uiコンポーネント
 │       ├── button.jsx
 │       └── switch.jsx
