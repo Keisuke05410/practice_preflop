@@ -144,6 +144,9 @@
   /* Card Pair Layer */
   .card-pair-layer {
     @apply absolute inset-0 flex gap-6 max-sm:gap-3.5;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   /* 個別カード表示 */
