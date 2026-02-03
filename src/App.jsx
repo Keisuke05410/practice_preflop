@@ -54,7 +54,7 @@ function App() {
       <div className="flex gap-6 max-sm:gap-3.5">
         {cards.map((card, index) => (
           <Card
-            key={`${card.rank}-${card.suit}-${index}`}
+            key={index}
             rank={card.rank}
             suit={card.suit}
             isFlipping={isFlipping}
