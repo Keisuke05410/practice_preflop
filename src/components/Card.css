@@ -1,0 +1,102 @@
+.card {
+  width: 100px;
+  height: 140px;
+  background: linear-gradient(145deg, #ffffff, #f5f5f5);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
+  border: 2px solid #e0e0e0;
+}
+
+.card.flipping {
+  animation: flipCard 0.4s ease;
+}
+
+@keyframes flipCard {
+  0% {
+    transform: rotateY(0deg) scale(1);
+  }
+  50% {
+    transform: rotateY(90deg) scale(0.95);
+  }
+  100% {
+    transform: rotateY(0deg) scale(1);
+  }
+}
+
+.card-corner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.card-corner.top-left {
+  align-self: flex-start;
+}
+
+.card-corner.bottom-right {
+  align-self: flex-end;
+  transform: rotate(180deg);
+}
+
+.card-rank {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: 'Georgia', serif;
+}
+
+.card-suit-small {
+  font-size: 18px;
+}
+
+.card-suit-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+}
+
+/* 赤のスーツ（ハート、ダイヤ） */
+.card.red .card-rank,
+.card.red .card-suit-small,
+.card.red .card-suit-center {
+  color: #cc0000;
+}
+
+/* 黒のスーツ（スペード、クラブ） */
+.card.black .card-rank,
+.card.black .card-suit-small,
+.card.black .card-suit-center {
+  color: #1a1a1a;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 480px) {
+  .card {
+    width: 80px;
+    height: 112px;
+    padding: 6px;
+  }
+
+  .card-rank {
+    font-size: 20px;
+  }
+
+  .card-suit-small {
+    font-size: 14px;
+  }
+
+  .card-suit-center {
+    font-size: 36px;
+  }
+}
