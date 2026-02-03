@@ -14,7 +14,7 @@ const ANIMATION_TYPES = [
 function App() {
   // 2レイヤー状態管理
   const [layerA, setLayerA] = useState(() => drawTwoCards());
-  const [layerB, setLayerB] = useState(null);
+  const [layerB, setLayerB] = useState(() => drawTwoCards());
   const [activeLayer, setActiveLayer] = useState('A');
 
   const [position, setPosition] = useState(() => getRandomPosition());
@@ -50,13 +50,18 @@ function App() {
     const nextCards = drawTwoCards();
     const nextPosition = getRandomPosition();
 
+    // 1. 新しいカードデータをセット
     if (activeLayer === 'A') {
       setLayerB(nextCards);
-      setActiveLayer('B');
     } else {
       setLayerA(nextCards);
-      setActiveLayer('A');
     }
+
+    // 2. 次フレームでアクティブレイヤー切り替え（DOM更新後）
+    requestAnimationFrame(() => {
+      setActiveLayer(activeLayer === 'A' ? 'B' : 'A');
+    });
+
     setPosition(nextPosition);
   }, [activeLayer]);
 
@@ -86,13 +91,9 @@ function App() {
 
       <div className="cards-pair-container">
         {/* Layer A */}
-        {layerA && (
-          <CardPair cards={layerA} isVisible={activeLayer === 'A'} animationType={animationType} />
-        )}
+        <CardPair cards={layerA} isVisible={activeLayer === 'A'} animationType={animationType} />
         {/* Layer B */}
-        {layerB && (
-          <CardPair cards={layerB} isVisible={activeLayer === 'B'} animationType={animationType} />
-        )}
+        <CardPair cards={layerB} isVisible={activeLayer === 'B'} animationType={animationType} />
       </div>
 
       <Button size="lg" onClick={handleNextHand}>
