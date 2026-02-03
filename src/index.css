@@ -179,8 +179,10 @@
     animation: fadeOutFront 0.3s forwards;
   }
 
-  /* flipIn時にカード前面を表示する（270度を超えたら見える） */
+  /* flipIn時: ベースで非表示にし、アニメーションで表示を制御 */
+  /* フォールバック: アニメーション適用前は確実に非表示 */
   .card-wrapper.flip-in .card-front {
+    opacity: 0;
     animation: fadeInFront 0.3s forwards;
   }
 
